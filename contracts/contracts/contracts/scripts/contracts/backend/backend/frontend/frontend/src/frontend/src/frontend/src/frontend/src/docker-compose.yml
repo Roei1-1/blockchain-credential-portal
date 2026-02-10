@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - INFURA_API_KEY=${INFURA_API_KEY}
+      - PRIVATE_KEY=${PRIVATE_KEY}
+      - CONTRACT_ADDRESS=${CONTRACT_ADDRESS}
+      - PINATA_API_KEY=${PINATA_API_KEY}
+      - PINATA_SECRET_KEY=${PINATA_SECRET_KEY}
+      - JWT_SECRET=${JWT_SECRET}
+      - NODE_ENV=production
+    volumes:
+      - ./backend:/app/backend
+      - /app/backend/node_modules
+    networks:
+      - credential-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  frontend:
+    image: node:18-alpine
+    working_dir: /app/frontend
+    command: npm start
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./frontend:/app/frontend
+      - /app/frontend/node_modules
+    environment:
+      - REACT_APP_API_URL=http://localhost:3000/api
+    networks:
+      - credential-network
+    depends_on:
+      - backend
+
+networks:
+  credential-network:
+    driver: bridge
+
+volumes:
+  backend_node_modules:
+  frontend_node_modules:
