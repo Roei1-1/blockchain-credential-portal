@@ -1,0 +1,29 @@
+{
+  "name": "blockchain-credential-portal",
+  "version": "1.0.0",
+  "description": "Blockchain-Verified Digital Credential & Career Tracking Portal for DREESMNHS",
+  "private": true,
+  "scripts": {
+    "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install && cd ../contracts && npm install",
+    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm start\"",
+    "build": "cd backend && npm run build && cd ../frontend && npm run build",
+    "test": "cd backend && npm test && cd ../contracts && npm test",
+    "docker:build": "docker-compose build",
+    "docker:up": "docker-compose up",
+    "docker:down": "docker-compose down",
+    "deploy:contract": "cd contracts && npx hardhat run scripts/deploy.js --network sepolia",
+    "deploy:heroku": "git push heroku main"
+  },
+  "keywords": [
+    "blockchain",
+    "credentials",
+    "ethereum",
+    "education",
+    "career-tracking"
+  ],
+  "author": "Roei1-1",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^7.6.0"
+  }
+}
